@@ -156,7 +156,7 @@ func (p *Provider) ServiceStats() (*provider.SiteStatistics, error) {
 }
 
 // PinContent pins content to this provider.
-func (p *Provider) PinContent(name string, content io.Reader) (string, error) {
+func (p *Provider) PinContent(name string, content io.Reader, opts *provider.ContentOpts) (string, error) {
 	var b bytes.Buffer
 	var contentType string
 
@@ -176,6 +176,15 @@ func (p *Provider) PinContent(name string, content io.Reader) (string, error) {
 			return "", err
 		}
 		io.Copy(fw, content)
+
+		if opts.StoreInDirectory {
+			fw, err := w.CreateFormField("pinataOptions")
+			if err != nil {
+				return "", err
+			}
+			fw.Write([]byte(`{"wrapWithDirectory":true}`))
+		}
+
 		w.Close()
 		contentType = w.FormDataContentType()
 	}

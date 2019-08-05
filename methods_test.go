@@ -7,10 +7,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	provider "github.com/wealdtech/go-ipfs-provider"
 )
 
 const (
-	testFileHash = "QmeeLUVdiSTTKQqhWqsffYDtNvvvcTfJdotkNyi1KDEJtQ"
+	testFileHash          = "QmeeLUVdiSTTKQqhWqsffYDtNvvvcTfJdotkNyi1KDEJtQ"
+	testFileDirectoryHash = "QmP7RfPwpB8GgK5zhqQYxDRerUBxqVPkNruvyck864cRwy"
 )
 
 func TestList(t *testing.T) {
@@ -18,10 +20,10 @@ func TestList(t *testing.T) {
 		t.Skip("no api key or secret; cannot test")
 	}
 
-	provider, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
 	require.Nil(t, err, "unexpected error")
 
-	content, err := provider.List()
+	content, err := p.List()
 	assert.Nil(t, err, "unexpected error")
 
 	assert.Equal(t, len(content), 3)
@@ -32,16 +34,33 @@ func TestPinContent(t *testing.T) {
 		t.Skip("no api key or secret; cannot test")
 	}
 
-	provider, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
 	require.Nil(t, err, "unexpected error")
 
 	file, err := os.Open("resources/testfile")
 	require.Nil(t, err, "unexpected error")
 
-	hash, err := provider.PinContent("test file", file)
+	hash, err := p.PinContent("test file", file, nil)
 	assert.Nil(t, err, "unexpected error")
 
 	assert.Equal(t, testFileHash, hash)
+}
+
+func TestPinContentOpts(t *testing.T) {
+	if pinataAPIKey == "" || pinataAPISecret == "" {
+		t.Skip("no api key or secret; cannot test")
+	}
+
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	require.Nil(t, err, "unexpected error")
+
+	file, err := os.Open("resources/testfile")
+	require.Nil(t, err, "unexpected error")
+
+	hash, err := p.PinContent("testfile", file, &provider.ContentOpts{StoreInDirectory: true})
+	assert.Nil(t, err, "unexpected error")
+
+	assert.Equal(t, testFileDirectoryHash, hash)
 }
 
 func TestSiteStats(t *testing.T) {
@@ -49,10 +68,10 @@ func TestSiteStats(t *testing.T) {
 		t.Skip("no api key or secret; cannot test")
 	}
 
-	provider, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
 	require.Nil(t, err, "unexpected error")
 
-	stats, err := provider.ServiceStats()
+	stats, err := p.ServiceStats()
 	assert.Nil(t, err, "unexpected error")
 	assert.Equal(t, uint64(4), stats.Items)
 	assert.Equal(t, uint64(26786414), stats.Size)
@@ -63,10 +82,10 @@ func TestItemStats(t *testing.T) {
 		t.Skip("no api key or secret; cannot test")
 	}
 
-	provider, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
 	require.Nil(t, err, "unexpected error")
 
-	item, err := provider.ItemStats(testFileHash)
+	item, err := p.ItemStats(testFileHash)
 	assert.Nil(t, err, "unexpected error")
 	assert.Equal(t, testFileHash, item.Hash)
 	assert.Equal(t, "test file", item.Name)
@@ -78,10 +97,10 @@ func TestPin(t *testing.T) {
 		t.Skip("no api key or secret; cannot test")
 	}
 
-	provider, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
 	require.Nil(t, err, "unexpected error")
 
-	err = provider.Pin(testFileHash)
+	err = p.Pin(testFileHash)
 	assert.Nil(t, err, "unexpected error")
 }
 
@@ -90,10 +109,10 @@ func TestUnpin(t *testing.T) {
 		t.Skip("no api key or secret; cannot test")
 	}
 
-	provider, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
 	require.Nil(t, err, "unexpected error")
 
-	err = provider.Unpin(testFileHash)
+	err = p.Unpin(testFileHash)
 	assert.Nil(t, err, "unexpected error")
 }
 
@@ -180,11 +199,11 @@ func TestGatewayURL(t *testing.T) {
 		},
 	}
 
-	provider, err := NewProvider(pinataAPIKey, pinataAPISecret)
+	p, err := NewProvider(pinataAPIKey, pinataAPISecret)
 	require.Nil(t, err, "unexpected error")
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			result, err := provider.GatewayURL(test.input)
+			result, err := p.GatewayURL(test.input)
 			if test.err != nil {
 				require.NotNil(t, err, "failed to obtain expected error")
 				if err != nil {

@@ -22,10 +22,8 @@ github.com/spaolacci/murmur3 v1.1.0/go.mod h1:JwIasOWyU6f++ZhiEuf87xNszmSA2myDM2
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/wealdtech/go-ipfs-pinner v0.0.0-20190730113833-05ab5e64c04b h1:GweXpQuBMmw+swcBEd/OhO7r/iQ9Q+9VndHJDg7QOKk=
-github.com/wealdtech/go-ipfs-pinner v0.0.0-20190730113833-05ab5e64c04b/go.mod h1:frlD229s7rKH4jGbLXhpVP2ShU32ARpFjljTTQoM7HA=
-github.com/wealdtech/go-ipfs-provider v1.0.0 h1:7KUhjFhZX9rIjG9bMFXIFNMu4TUgrIgXP+iajuAxkHs=
-github.com/wealdtech/go-ipfs-provider v1.0.0/go.mod h1:ABxMlvyuNm+3IxnoWCQponMfgGzoPsQXviCRT+17ZnE=
+github.com/wealdtech/go-ipfs-provider v1.1.0 h1:OOswUWz+0cWio1A4MEBFt95pu8QnpVvch1yOoHPC9AY=
+github.com/wealdtech/go-ipfs-provider v1.1.0/go.mod h1:ABxMlvyuNm+3IxnoWCQponMfgGzoPsQXviCRT+17ZnE=
 golang.org/x/crypto v0.0.0-20190211182817-74369b46fc67/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20190611184440-5c40567a22f8 h1:1wopBVtVdWnn03fZelqdXTqk7U7zPQCb+T4rbU9ZEoU=
